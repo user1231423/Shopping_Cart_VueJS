@@ -67,7 +67,7 @@
 
 <script>
 export default {
-  props: {
+    /*props: {
     items: {
       type: Array,
       default: () => []
@@ -76,12 +76,15 @@ export default {
       type: Number,
       default: 0
     }
-  },
+  },*/
   computed: {
+    items: function(){
+      return this.$store.getters.getCartItems;
+    },
     total: function() {
       var total = 0;
 
-      this.items.forEach(element => {
+      this.$store.getters.getCartItems.forEach(element => {
         total += element.Preco * element.Quantity;
       });
 
@@ -89,18 +92,8 @@ export default {
     }
   },
   methods: {
-    removeFromCart(dog) {
-      for (var i = 0; i < this.items.length; i++) {
-        if (this.items[i].Id == dog.Id) {
-          if (this.items[i].Quantity > 1) {
-            this.items[i].Quantity -= 1;
-            break;
-          } else {
-            this.items.splice(i, 1);
-            break;
-          }
-        }
-      }
+    removeFromCart(item) {
+      this.$store.dispatch('removeFromCart', item);
     },
     alertarUser() {
       if(this.items.length == 0){

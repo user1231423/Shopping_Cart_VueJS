@@ -37,7 +37,7 @@
           <span class="caret"></span>
         </button>
         <div v-on:click="avoid($event)" class="dropdown-menu" role="menu" aria-labelledby="menu1">
-          <ShoppingCart :items="items" :totalPrice="totalPrice"/>
+          <ShoppingCart />
         </div>
       </div>
     </nav>
@@ -73,9 +73,7 @@ export default {
   components: { ShoppingCart },
   data() {
     return {
-      items: [],
-      dogs: [],
-      totalPrice: 0
+      dogs: []
     };
   },
   created() {
@@ -83,17 +81,7 @@ export default {
   },
   methods: {
     addToCart(dog,e) {
-      e.stopPropagation();
-      var found = false;
-      this.items.forEach(element => {
-        if(element.Id == dog.Id){
-          element.Quantity += 1;
-          found = true;
-        }
-      });
-      if(!found){
-        this.items.push(dog);
-      }
+      this.$store.dispatch('addToCart', {dog, e});
     },
     avoid(e) {
       e.stopPropagation();
