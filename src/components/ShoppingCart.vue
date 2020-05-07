@@ -97,7 +97,7 @@ export default {
       this.$store.dispatch("removeFromCart", item);
     },
     alertarUser() {
-      if (this.items.length == 0) {
+      if (this.$store.getters.getCartItems.length == 0) {
         alert("VAIS COMPRAR MAS É O CRLH!");
       } else {
         alert("Parabéns agora tem uma divida de " + this.total);
