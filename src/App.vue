@@ -33,7 +33,7 @@
           aria-haspopup="true"
           aria-expanded="false"
         >
-          Tutorials
+          Cart
           <span class="caret"></span>
         </button>
         <div v-on:click="avoid($event)" class="dropdown-menu" role="menu" aria-labelledby="menu1">
