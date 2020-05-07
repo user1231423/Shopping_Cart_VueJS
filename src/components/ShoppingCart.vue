@@ -30,7 +30,7 @@
           </td>
           <td></td>
           <td class="col-sm-1 col-md-1">
-            <button v-on:click="removeFromCart(item)" type="button" class="btn btn-danger">
+            <button v-on:click="removeFromCart(item, $event)" type="button" class="btn btn-danger">
               <span class="glyphicon glyphicon-remove"></span> Remove
             </button>
           </td>
@@ -67,7 +67,7 @@
 
 <script>
 export default {
-    /*props: {
+  /*props: {
     items: {
       type: Array,
       default: () => []
@@ -78,7 +78,7 @@ export default {
     }
   },*/
   computed: {
-    items: function(){
+    items: function() {
       return this.$store.getters.getCartItems;
     },
     total: function() {
@@ -92,14 +92,15 @@ export default {
     }
   },
   methods: {
-    removeFromCart(item) {
-      this.$store.dispatch('removeFromCart', item);
+    removeFromCart(item, e) {
+      e.stopPropagation();
+      this.$store.dispatch("removeFromCart", item);
     },
     alertarUser() {
-      if(this.items.length == 0){
-        alert("VAIS COMPRAR MAS É O CRLH!")
-      }else{
-        alert("Parabéns agora tem uma divida de " + this.total)
+      if (this.items.length == 0) {
+        alert("VAIS COMPRAR MAS É O CRLH!");
+      } else {
+        alert("Parabéns agora tem uma divida de " + this.total);
       }
     }
   }
