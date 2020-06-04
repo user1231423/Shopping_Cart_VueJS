@@ -20,5 +20,6 @@ Vue.config.productionTip = false
 new Vue({
   router,
   store,
+  beforeCreate(){this.$store.commit('getLocalStorageItem')},
   render: function (h) { return h(App) }
 }).$mount('#app')

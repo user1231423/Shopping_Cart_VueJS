@@ -67,16 +67,6 @@
 
 <script>
 export default {
-  /*props: {
-    items: {
-      type: Array,
-      default: () => []
-    },
-    totalPrice: {
-      type: Number,
-      default: 0
-    }
-  },*/
   computed: {
     items: function() {
       return this.$store.getters.getCartItems;

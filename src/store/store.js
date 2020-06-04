@@ -9,11 +9,22 @@ export default new Vuex.Store({
         cartItems: []
     },
     mutations: {
+        getLocalStorageItem(state){
+            var items = JSON.parse(localStorage.getItem('CartItems'));
+            if(items === null || items.length === 0){
+                items = [];
+                var save = JSON.stringify(items);
+                localStorage.setItem('CartItems', JSON.stringify(items))
+            }
+            state.cartItems = items;
+        },
         removeItem(state, index) {
             state.cartItems.splice(index, 1);
+            localStorage.setItem('CartItems', JSON.stringify(state.cartItems))
         },
         decreaseQuantity(state, index){
             state.cartItems[index].Quantity -= 1;
+            localStorage.setItem('CartItems', JSON.stringify(state.cartItems))
         },
         addItem(state, item){
             state.cartItems.push(item);
@@ -45,6 +56,7 @@ export default new Vuex.Store({
             if(!found){
               commit('addItem', object.dog);
             }
+            localStorage.setItem('CartItems', JSON.stringify(this.state.cartItems))
           }
     },
     getters: {
