@@ -66,7 +66,9 @@
     <SignUpModal ref="signupModal"></SignUpModal>
 
     <div class="container">
-      <router-view />
+      <transition name="fade">
+        <router-view />
+      </transition>
     </div>
   </div>
 </template>
@@ -81,7 +83,7 @@ export default {
   name: "App",
   components: { ShoppingCart, LoginModal, SignUpModal },
   methods: {
-    avoid(e){
+    avoid(e) {
       e.stopPropagation();
     },
     openLoginModal() {
@@ -117,5 +119,15 @@ export default {
 }
 a:hover {
   cursor: pointer;
+}
+</style>
+
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

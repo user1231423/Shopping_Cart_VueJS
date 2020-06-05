@@ -37,9 +37,8 @@ export default {
         .get(API_URL + this.searchWord)
         .then(res => {
           this.photos = res.data.photos.results;
-          console.log(this.photos);
         })
-        .catch(err => console.log(err));
+        .catch(err => alert(err));
     },
     showDetails(username){
       this.$router.push({ name: 'Photo_OwnerDesc', params: { username } })
@@ -49,6 +48,10 @@ export default {
 </script>
 
 <style>
+.card:hover {
+  transform: scale(1.01);
+}
+
 .card {
   max-height: 10em;
   max-width: 15em;

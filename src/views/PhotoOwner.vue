@@ -48,22 +48,21 @@ export default {
   data() {
     return {
       username: "",
-      userInfo: null
+      userInfo: {
+        profile_image: {
+          large: "https://lh3.googleusercontent.com/proxy/cpxfJve9lPtGHMrNaV3SjOplXnyaGQUov8ZF3k1H44dnhHpohLRwtQO2gwpVaQ3TqoqC1FHQcKNXfTb079c0polBIIPwzh25A1gUe57TvUZpALBsMgzWfd_l2KiBO2XXNGqBVrk"
+        }
+      }
     };
   },
-  created() {
+  mounted() {
     this.username = this.$route.params.username;
-    if (this.username != null) {
-      axios
-        .get(API_URL + this.username + Access_Token)
-        .then(res => {
-          this.userInfo = res.data;
-          console.log(res.data);
-        })
-        .catch(err => console.log(err));
-    }else{
-        this.userInfo.profile_image = "";
-    }
+    axios
+      .get(API_URL + this.username + Access_Token)
+      .then(res => {
+        this.userInfo = res.data;
+      })
+      .catch(err => alert);
   },
   methods: {}
 };
