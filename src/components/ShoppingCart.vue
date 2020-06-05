@@ -79,18 +79,25 @@ export default {
       });
 
       return total;
+    },
+    isLoggedIn: function() {
+      return this.$store.getters.getUser.loggedIn;
     }
   },
   methods: {
     removeFromCart(item, e) {
       e.stopPropagation();
-      this.$store.dispatch("removeFromCart", item);
+      if (this.isLoggedIn) {
+        this.$store.dispatch("removeFromCart", item);
+      }
     },
     alertarUser() {
-      if (this.$store.getters.getCartItems.length == 0) {
-        alert("VAIS COMPRAR MAS É O CRLH!");
-      } else {
-        alert("Parabéns agora tem uma divida de " + this.total);
+      if (this.isLoggedIn) {
+        if (this.$store.getters.getCartItems.length == 0) {
+          alert("You have nothing to buy!");
+        } else {
+          alert("Parabéns agora tem uma divida de " + this.total);
+        }
       }
     }
   }

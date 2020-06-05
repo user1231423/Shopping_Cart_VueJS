@@ -17,14 +17,35 @@
 
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-            <router-link class="nav-link" to="/Home">Home</router-link>
+          <router-link class="nav-link" to="/Home">Home</router-link>
         </li>
-        <li class="nav-item">
-          <a v-on:click="openLoginModal($event)" class="nav-link" data-toggle="modal" data-target="#login-modal">Login</a>
+        <li class="nav-item" v-if="!isLoggedIn">
+          <a
+            v-on:click="openLoginModal()"
+            class="nav-link"
+            data-toggle="modal"
+            data-target="#login-modal"
+          >Login</a>
+        </li>
+        <li class="nav-item" v-if="!isLoggedIn">
+          <a
+            v-on:click="openSignUpModal()"
+            class="nav-link"
+            data-toggle="modal"
+            data-target="#login-modal"
+          >SignUp</a>
+        </li>
+        <li class="nav-item" v-if="isLoggedIn">
+          <a
+            v-on:click="logout()"
+            class="nav-link"
+            data-toggle="modal"
+            data-target="#login-modal"
+          >Logout</a>
         </li>
       </ul>
 
-      <div class="btn-group dropleft">
+      <div class="btn-group dropleft" v-if="isLoggedIn">
         <button
           class="btn btn-default dropdown-toggle"
           type="button"
@@ -42,7 +63,7 @@
       </div>
     </nav>
     <LoginModal ref="loginModal"></LoginModal>
-
+    <SignUpModal ref="signupModal"></SignUpModal>
 
     <div class="container">
       <router-view />
@@ -53,28 +74,48 @@
 <script>
 import ShoppingCart from "./components/ShoppingCart";
 import LoginModal from "./components/LoginModal";
+import SignUpModal from "./components/SignUpModal";
+import firebase from "firebase";
 
 export default {
   name: "App",
-  components: { ShoppingCart, LoginModal },
-  methods:{
-    openLoginModal(){
+  components: { ShoppingCart, LoginModal, SignUpModal },
+  methods: {
+    avoid(e){
+      e.stopPropagation();
+    },
+    openLoginModal() {
+      this.$refs.signupModal.hide();
       this.$refs.loginModal.show();
     },
-    close(){
-      console.log("close");
+    openSignUpModal() {
+      this.$refs.loginModal.hide();
+      this.$refs.signupModal.show();
+    },
+    logout() {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.$router.replace({ name: "Root" });
+        });
+    }
+  },
+  computed: {
+    isLoggedIn: function() {
+      return this.$store.getters.getUser.loggedIn;
     }
   }
 };
 </script>
 
 <style scoped>
-.container{
+.container {
   position: relative;
-  height: 100vh;
+  height: 80vh;
   width: 100vw;
 }
-a:hover{
+a:hover {
   cursor: pointer;
 }
 </style>

@@ -6,9 +6,19 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        cartItems: []
+        cartItems: [],
+        user: {
+            loggedIn: false,
+            data: null
+        }
     },
     mutations: {
+        set_logged_in(state, value){
+            state.user.loggedIn = value;
+        },
+        set_user(state,data){
+            state.user.data = data;
+        },
         getLocalStorageItem(state){
             var items = JSON.parse(localStorage.getItem('CartItems'));
             if(items === null || items.length === 0){
@@ -31,6 +41,17 @@ export default new Vuex.Store({
         }
     },
     actions: {
+        fetchUser({commit}, user){
+            commit("set_logged_in", user!= null);
+            if(user){
+                commit("set_user", {
+                    displayName: user.displayName,
+                    email: user.email
+                });
+            }else{
+                commit("set_user", null);
+            }
+        },
         removeFromCart({ commit }, item) {
             for (var i = 0; i < this.state.cartItems.length; i++) {
                 if (this.state.cartItems[i].Id == item.Id) {
@@ -60,6 +81,7 @@ export default new Vuex.Store({
           }
     },
     getters: {
-        getCartItems: state => state.cartItems
+        getCartItems: state => state.cartItems,
+        getUser: state => state.user
     }
 });

@@ -5,19 +5,29 @@
         <div class="header">
           <button v-on:click="hide()" type="button" aria-label="Close" class="close">×</button>
         </div>
-        <h1>Login to Your Account</h1>
+        <h1>Register your Account</h1>
         <br />
         <form>
+          <label for="name">Name:</label>
+          <input type="text" name="name" placeholder="Name" v-model="name" />
           <label for="email">Email:</label>
-          <input type="text" name="email" placeholder="Username" v-model="form.email" />
+          <input type="text" name="email" placeholder="Password" v-model="form.email" />
           <label for="password">Password:</label>
           <input type="password" name="password" placeholder="Password" v-model="form.password" />
-          <button type="button" class="btn btn-primary" v-on:click="submit()">Login</button>
+          <label for="password">Repeat Password:</label>
+          <input
+            type="password"
+            name="repeat-password"
+            placeholder="Repeat Password"
+            v-model="repeatPassword"
+          />
+          <button type="button" class="btn btn-primary" v-on:click="submit()">SignUp</button>
         </form>
       </div>
     </div>
   </div>
 </template>
+
 <script>
 import firebase from "firebase";
 
@@ -28,7 +38,9 @@ export default {
       form: {
         email: "",
         password: ""
-      }
+      },
+      name: "",
+      repeatPassword: ""
     };
   },
   methods: {
@@ -40,20 +52,34 @@ export default {
     },
     submit() {
       this.showModal = false;
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(this.form.email, this.form.password)
-        .then(data => {
-          this.$router.replace({ name: "Dashboard" });
-        })
-        .catch(err => {
-          alert(err);
-        });
+      if (this.form.password != this.repeatPassword) {
+        alert("Passwords don't match!");
+      } else {
+        firebase
+          .auth()
+          .createUserWithEmailAndPassword(this.form.email, this.form.password)
+          .then(data => {
+            data.user
+              .updateProfile({
+                displayName: this.name
+              })
+              .then(() => {
+                this.$router.replace({ name: "Dashboard" });
+              });
+          })
+          .catch(err => {
+            alert(err);
+          });
+      }
     }
   }
 };
 </script>
 <style scoped>
+label {
+  text-align: left;
+}
+
 .loginModal {
   overflow-x: hidden;
   overflow-y: auto;

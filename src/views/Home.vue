@@ -15,12 +15,10 @@
 </template>
 <script>
 const API_URL = "https://frontend-uma.firebaseio.com/.json";
-import ShoppingCart from "../components/ShoppingCart";
 import axios from "axios";
 
 export default {
-  name: "App",
-  components: { ShoppingCart },
+  name: "Home",
   data() {
     return {
       dogs: []
@@ -32,7 +30,14 @@ export default {
   methods: {
     addToCart(dog, e) {
       e.stopPropagation();
-      this.$store.dispatch("addToCart", { dog, e });
+      if(this.isLoggedIn){
+        this.$store.dispatch("addToCart", { dog, e });
+      }
+    }
+  },
+  computed: {
+    isLoggedIn: function() {
+      return this.$store.getters.getUser.loggedIn;
     }
   }
 };
