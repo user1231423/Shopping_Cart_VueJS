@@ -23,7 +23,6 @@ export default new Vuex.Store({
             var items = JSON.parse(localStorage.getItem('CartItems'));
             if(items === null || items.length === 0){
                 items = [];
-                var save = JSON.stringify(items);
                 localStorage.setItem('CartItems', JSON.stringify(items))
             }
             state.cartItems = items;
@@ -64,6 +63,7 @@ export default new Vuex.Store({
                     }
                 }
             }
+            localStorage.setItem('CartItems', JSON.stringify(this.state.cartItems))
         },
         addToCart({commit}, object) {
             object.e.stopPropagation();
