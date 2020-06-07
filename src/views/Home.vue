@@ -3,11 +3,11 @@
     <ErrorAlert v-if="errorMsg.length > 0" v-bind:message="errorMsg"></ErrorAlert>
     <SuccessAlert v-if="successAlert"></SuccessAlert>
     <div class="d-flex align-content-around flex-wrap">
-      <div v-for="dog in dogs" :key="dog.id">
-        <div class="card" v-on:click="addToCart(dog, $event)">
-          <img class="card-img-top" :src="dog.Image" alt="Card image cap" />
+      <div v-for="camel in camels" :key="camel.id">
+        <div class="card" v-on:click="addToCart(camel, $event)">
+          <img class="card-img-top" :src="camel.Image" alt="Card image cap" />
           <div class="card-body">
-            <h5 class="card-title">{{dog.name}}</h5>
+            <h5 class="card-title">{{camel.name}}</h5>
             <p
               class="card-text"
             >Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...</p>
@@ -18,7 +18,7 @@
   </div>
 </template>
 <script>
-const API_URL = "https://frontend-uma.firebaseio.com/.json";
+const API_URL = "https://frontend-22587.firebaseio.com/.json";
 import axios from "axios";
 import ErrorAlert from "../components/Alerts/Error";
 import SuccessAlert from "../components/Alerts/Success";
@@ -30,24 +30,25 @@ export default {
     return {
       successAlert: false,
       errorMsg: "",
-      dogs: []
+      camels: []
     };
   },
   created() {
     axios.get(API_URL).then(res => {
-      this.dogs = res.data;
-      if (this.dogs.length == 0) {
-        this.errorMsg = "No Dogs Found!";
+      this.camels = res.data;
+      console.log(res.data)
+      if (this.camels.length == 0) {
+        this.errorMsg = "No camels Found!";
       }
     });
   },
   methods: {
-    addToCart(dog, e) {
+    addToCart(camel, e) {
       e.stopPropagation();
       if (this.isLoggedIn) {
         this.successAlert = true;
         setTimeout(() => (this.successAlert = false), 1000);
-        this.$store.dispatch("addToCart", { dog, e });
+        this.$store.dispatch("addToCart", { camel, e });
       }
     }
   },

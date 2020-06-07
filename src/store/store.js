@@ -66,16 +66,17 @@ export default new Vuex.Store({
             localStorage.setItem('CartItems', JSON.stringify(this.state.cartItems))
         },
         addToCart({commit}, object) {
+            console.log(object);
             object.e.stopPropagation();
             var found = false;
             this.state.cartItems.forEach(element => {
-              if(element.Id == object.dog.Id){
+              if(element.Id == object.camel.Id){
                 element.Quantity += 1;
                 found = true;
               }
             });
             if(!found){
-              commit('addItem', object.dog);
+              commit('addItem', object.camel);
             }
             localStorage.setItem('CartItems', JSON.stringify(this.state.cartItems))
           }
