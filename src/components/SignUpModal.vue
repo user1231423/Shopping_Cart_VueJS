@@ -11,7 +11,7 @@
           <label for="name">Name:</label>
           <input type="text" name="name" placeholder="Name" v-model="name" />
           <label for="email">Email:</label>
-          <input type="text" name="email" placeholder="Password" v-model="form.email" />
+          <input type="text" name="email" placeholder="Email" v-model="form.email" />
           <label for="password">Password:</label>
           <input type="password" name="password" placeholder="Password" v-model="form.password" />
           <label for="password">Repeat Password:</label>

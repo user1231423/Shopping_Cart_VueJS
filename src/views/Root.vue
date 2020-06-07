@@ -20,17 +20,19 @@
         </div>
       </div>
     </div>
+    <LoginModal ref="loginModal"></LoginModal>
   </div>
 </template>
 <script>
 const API_URL =
   "https://api.unsplash.com/search/?client_id=9Iiz8zyikc6To-YD0cuD1W0jetj2w3P2z_CmiNKbpEo&&photos?page=1&query=";
 import axios from "axios";
+import LoginModal from "../components/LoginModal";
 import ErrorAlert from "../components/Alerts/Error";
 
 export default {
   name: "Root",
-  components: { ErrorAlert },
+  components: { ErrorAlert, LoginModal },
   data() {
     return {
       errorMsg: "",
@@ -44,14 +46,25 @@ export default {
         .get(API_URL + this.searchWord)
         .then(res => {
           this.photos = res.data.photos.results;
-          if(this.photos.length == 0){
+          if (this.photos.length == 0) {
             this.errorMsg = "No photos found!";
           }
         })
-        .catch(err => this.errorMsg = err);
+        .catch(err => (this.errorMsg = err));
     },
     showDetails(username) {
-      this.$router.push({ name: "Photo_OwnerDesc", params: { username } });
+      if (this.isLoggedIn) {
+        this.$router.push({ name: "Photo_OwnerDesc", params: { username } });
+      } else {
+        this.errorMsg = "Login First!";
+        this.$refs.loginModal.show();
+        setTimeout(() => (this.errorMsg = ""), 3000);
+      }
+    }
+  },
+  computed: {
+    isLoggedIn: function() {
+      return this.$store.getters.getUser.loggedIn;
     }
   }
 };

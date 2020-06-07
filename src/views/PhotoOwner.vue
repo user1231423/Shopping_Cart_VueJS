@@ -78,6 +78,11 @@ export default {
   methods:{
     follow(){
       this.following = !this.following;
+      if(this.following){
+        this.userInfo.followers_count += 1;
+      }else{
+        this.userInfo.followers_count -= 1;
+      }
     }
   },
   created() {
