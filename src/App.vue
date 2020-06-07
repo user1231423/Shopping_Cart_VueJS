@@ -13,10 +13,14 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <router-link class="navbar-brand" to="/">Fixed navbar</router-link>
-
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
+        <li class="nav-item">
+          <router-link class="nav-link" to="/">Root</router-link>
+        </li>
+        <li class="nav-item" v-if="isLoggedIn">
+          <router-link class="nav-link" to="/Dashboard">Dashboard</router-link>
+        </li>
+        <li class="nav-item">
           <router-link class="nav-link" to="/Home">Home</router-link>
         </li>
         <li class="nav-item" v-if="!isLoggedIn">
@@ -54,8 +58,9 @@
           aria-haspopup="true"
           aria-expanded="false"
         >
-          Cart
           <span class="caret"></span>
+          <i class="fa fa-shopping-cart"></i>
+          <span class="badge badge-light" v-if="itemCount > 0">{{itemCount}}</span>
         </button>
         <div v-on:click="avoid($event)" class="dropdown-menu" role="menu" aria-labelledby="menu1">
           <ShoppingCart />
@@ -106,12 +111,31 @@ export default {
   computed: {
     isLoggedIn: function() {
       return this.$store.getters.getUser.loggedIn;
+    },
+    itemCount: function() {
+      var total = 0;
+      var items = this.$store.getters.getCartItems;
+      items.forEach(element => {
+        total += element.Quantity;
+      });
+      return total;
     }
   }
 };
 </script>
 
 <style scoped>
+.badge {
+  position: absolute;
+  font-size: 10px;
+  left: 0.5em;
+  top: -1em !important;
+}
+
+.btn-default {
+  color: white;
+}
+
 .container {
   position: relative;
   height: 80vh;
@@ -123,6 +147,10 @@ a:hover {
 </style>
 
 <style>
+.nav-item:hover {
+  color: white !important;
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;

@@ -1,32 +1,39 @@
 <template>
-  <div class="d-flex align-content-around flex-wrap">
-    <div class="input-group mb-3">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Search something"
-        aria-describedby="basic-addon2"
-        v-model="searchWord"
-      />
-      <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button" v-on:click="search()">Search</button>
+  <div>
+    <ErrorAlert v-if="errorMsg.length > 0" v-bind:message="errorMsg"></ErrorAlert>
+    <div class="d-flex align-content-around flex-wrap">
+      <div class="input-group mb-3">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search something"
+          aria-describedby="basic-addon2"
+          v-model="searchWord"
+        />
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button" v-on:click="search()">Search</button>
+        </div>
       </div>
-    </div>
-    <div v-for="photo in photos" :key="photo.id">
-      <div class="card" v-on:click="showDetails(photo.user.username)">
-        <img class="card-img-top" :src="photo.urls.regular" alt="Card image cap" />
+      <div v-for="photo in photos" :key="photo.id">
+        <div class="card" v-on:click="showDetails(photo.user.username)">
+          <img class="card-img-top" :src="photo.urls.regular" alt="Card image cap" />
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-const API_URL = "https://api.unsplash.com/search/?client_id=9Iiz8zyikc6To-YD0cuD1W0jetj2w3P2z_CmiNKbpEo&&photos?page=1&query=";
+const API_URL =
+  "https://api.unsplash.com/search/?client_id=9Iiz8zyikc6To-YD0cuD1W0jetj2w3P2z_CmiNKbpEo&&photos?page=1&query=";
 import axios from "axios";
+import ErrorAlert from "../components/Alerts/Error";
 
 export default {
   name: "Root",
+  components: { ErrorAlert },
   data() {
     return {
+      errorMsg: "",
       searchWord: "",
       photos: []
     };
@@ -37,11 +44,14 @@ export default {
         .get(API_URL + this.searchWord)
         .then(res => {
           this.photos = res.data.photos.results;
+          if(this.photos.length == 0){
+            this.errorMsg = "No photos found!";
+          }
         })
-        .catch(err => alert(err));
+        .catch(err => this.errorMsg = err);
     },
-    showDetails(username){
-      this.$router.push({ name: 'Photo_OwnerDesc', params: { username } })
+    showDetails(username) {
+      this.$router.push({ name: "Photo_OwnerDesc", params: { username } });
     }
   }
 };
@@ -56,11 +66,12 @@ export default {
   max-height: 10em;
   max-width: 15em;
   margin-right: 2em;
-  margin-bottom: 15em;
+  margin-bottom: 2.5em;
 }
 
 .card-img-top {
-  max-height: 12em;
+  min-height: 10em;
+  max-height: 10em;
 }
 .card:hover {
   cursor: pointer;
@@ -91,13 +102,6 @@ export default {
     max-height: 40em;
     overflow: hidden;
     overflow-y: scroll;
-  }
-
-  .card {
-    max-height: 15em;
-    max-width: 15em;
-    margin-left: 3.5em;
-    margin-bottom: 15em;
   }
 }
 </style>

@@ -1,8 +1,7 @@
 <template>
   <div>
-    <div class="alert alert-success" v-if="alert">
-      <strong>Success!</strong> New Dog added to cart!
-    </div>
+    <ErrorAlert v-if="errorMsg.length > 0" v-bind:message="errorMsg"></ErrorAlert>
+    <SuccessAlert v-if="successAlert"></SuccessAlert>
     <div class="d-flex align-content-around flex-wrap">
       <div v-for="dog in dogs" :key="dog.id">
         <div class="card" v-on:click="addToCart(dog, $event)">
@@ -21,24 +20,33 @@
 <script>
 const API_URL = "https://frontend-uma.firebaseio.com/.json";
 import axios from "axios";
+import ErrorAlert from "../components/Alerts/Error";
+import SuccessAlert from "../components/Alerts/Success";
 
 export default {
   name: "Home",
+  components: { ErrorAlert, SuccessAlert },
   data() {
     return {
-      alert: false,
+      successAlert: false,
+      errorMsg: "",
       dogs: []
     };
   },
   created() {
-    axios.get(API_URL).then(res => (this.dogs = res.data));
+    axios.get(API_URL).then(res => {
+      this.dogs = res.data;
+      if (this.dogs.length == 0) {
+        this.errorMsg = "No Dogs Found!";
+      }
+    });
   },
   methods: {
     addToCart(dog, e) {
       e.stopPropagation();
       if (this.isLoggedIn) {
-        this.alert = true;
-        setTimeout(() => this.alert = false, 1000)
+        this.successAlert = true;
+        setTimeout(() => (this.successAlert = false), 1000);
         this.$store.dispatch("addToCart", { dog, e });
       }
     }
@@ -52,12 +60,12 @@ export default {
 </script>
 
 <style scoped>
-.alert{
-    position: relative;
-    z-index: 1001;
-    margin: 0 auto;
-    margin-bottom: 1em;
-    width: 30vw;
+.alert {
+  position: relative;
+  z-index: 1001;
+  margin: 0 auto;
+  margin-bottom: 1em;
+  width: 30vw;
 }
 
 .card:hover {
