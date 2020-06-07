@@ -96,8 +96,8 @@ export default {
         if (this.$store.getters.getCartItems.length == 0) {
           alert("You have nothing to buy!");
         } else {
-          this.$store.state.cartItems = [];
           alert("Parabéns agora tem uma divida de " + this.total);
+          this.$store.state.cartItems = [];
         }
       }
     }

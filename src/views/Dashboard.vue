@@ -69,6 +69,10 @@ export default {
 };
 </script>
 <style>
+.image_outer_container:hover{
+  cursor: pointer;
+  transform: scale(1.05);
+}
 .loader {
   position: relative;
   left: 0;
